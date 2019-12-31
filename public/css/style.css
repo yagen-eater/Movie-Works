@@ -1,0 +1,15 @@
+.movie{
+    width: 290px;
+}
+
+.pr{
+    height: 72px;
+}
+
+.button{
+    width: 290px;
+}
+
+.text-large > p{
+  font-size: 1.3rem;
+}
