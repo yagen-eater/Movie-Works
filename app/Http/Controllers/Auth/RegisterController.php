@@ -52,6 +52,17 @@ class RegisterController extends Controller
             'details' => 'required|string|max:800',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+        ], [
+            'name.required' => '名前は必ず入力してください',
+            'name.max' => '名前は30字以下で入力してください',
+            'details.required' => '企業詳細は必ず入力してください',
+            'details.max' => '企業詳細は800字以下で入力してください',
+            'email.required' => 'メールアドレスは必ず入力してください',
+            'email.max' => 'メールアドレスは255字以下で入力してください',
+            'email.unique' => '入力したメールアドレスはすでに登録済みです',
+            'password.required' => 'パスワードは必ず入力してください',
+            'password.min' => 'パスワードは6字以上で入力してください',
+            'password.confirmed' => 'パスワード確認がパスワードと一致していません',
         ]);
     }
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\JobInfo;
 use App\Upload;
+use Validator;
 
 class UploadController extends Controller
 {
@@ -23,14 +24,37 @@ class UploadController extends Controller
 
     public function store(Request $request, $id)
     {
-      $resume = $request->file('resume')->getClientOriginalName();
-      $CV = $request->file('CV')->getClientOriginalName();
 
-      $this->validate($request,[
-          'name' => 'required|max:15',
-          'email' => 'required|max:255',
-          'tel' => 'required|max:11|min:10',
-      ]);
+      if($request->file('resume')){
+          $resume = $request->file('resume')->getClientOriginalName();
+      }
+      if($request->file('CV')){
+          $CV = $request->file('CV')->getClientOriginalName();
+      }
+
+      $rules = [
+        'name' => 'required|max:20',
+        'email' => 'required|max:255',
+        'tel' => 'required|numeric',
+        'resume' => 'required',
+        'CV' => 'required',
+      ];
+
+      $messages = [
+        'name.required' => '名前は必ず入力してください',
+        'name.max' => '名前は20字以下で入力してください',
+        'email.required' => 'メールアドレスは必ず入力してください',
+        'email.max' => 'メールアドレスは255字以下で入力してください',
+        'tel.required' => '電話番号は必ず入力してください',
+        'tel.numeric' => '電話番号は数字のみで入力してください',
+        'resume.required' => '履歴書は必ず添付してください',
+        'CV.required' => '職務経歴書は必ず添付してください',
+      ];
+
+      $validator = Validator::make($request->all(), $rules, $messages);
+      if($validator->fails()){
+        return back()->withErrors($validator)->withInput();
+      }
 
       $jinfo = JobInfo::find($id);
       $jinfo->uploads()->create([

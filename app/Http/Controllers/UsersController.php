@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\User;
 use App\JobInfo;
+use Validator;
 
 class UsersController extends Controller
 {
@@ -56,6 +57,23 @@ class UsersController extends Controller
 
   public function update(Request $request)
     {
+        $rules = [
+          'name' => 'required|max:30',
+          'details' => 'required|max:800',
+        ];
+
+        $messages = [
+          'name.required' => '企業名は必ず入力してください',
+          'name.max' => '企業名は30字以下で入力してください',
+          'details.required' => '企業詳細は必ず入力してください',
+          'details.max' => '企業詳細は800字以下で入力してください',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if($validator->fails()){
+          return back()->withErrors($validator)->withInput();
+        }
+
         $this->validate($request,[
             'name' => 'required|max:30',
             'details' => 'required|max:800',
