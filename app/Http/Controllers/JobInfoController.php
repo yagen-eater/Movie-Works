@@ -140,6 +140,19 @@ class JobInfoController extends Controller
           return back()->withErrors($validator)->withInput();
         }
 
+         $request->user()->jobinfo()->where('id', $id)->update([
+             'url' => $request->url,
+             'occupation' => $request->occupation,
+             'work_location' => $request->work_location,
+             'employment_status' => $request->employment_status,
+             'job_description' => $request->job_description,
+             'salary' => $request->salary,
+             'working_hours' => $request->working_hours,
+             'holiday' => $request->holiday,
+             'welfare' => $request->welfare,
+             'supplement' => $request->supplement,
+         ]);
+
          $jinfo = JobInfo::find($id);
 
          $data=[
