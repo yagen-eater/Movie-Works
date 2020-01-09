@@ -105,8 +105,8 @@
                   @endif
               </p>
 
-              <p class="text-left ml-4"><a href="/storage/resume/{{ $upload->resume }}">履歴書</a>：{{ $upload->resume }}</p>
-              <p class="text-left ml-4"><a href="/storage/CV/{{ $upload->CV }}">職務経歴書</a>：{{ $upload->CV }}</p>
+              <p class="text-left ml-4"><a href="{{ $upload->resume }}">履歴書ダウンロード</a></p>
+              <p class="text-left ml-4"><a href="{{ $upload->CV }}">職務経歴書ダウンロード</a></p>
 
           </div>
 

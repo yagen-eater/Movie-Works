@@ -8,6 +8,7 @@ use App\User;
 use App\JobInfo;
 use App\Upload;
 use Validator;
+use Storage;
 
 class UploadController extends Controller
 {
@@ -56,18 +57,26 @@ class UploadController extends Controller
         return back()->withErrors($validator)->withInput();
       }
 
+      //s3アップロード開始
+      $resume = $request->file('resume');
+      $CV = $request->file('CV');
+
+      //バケットのresumeフォルダにファイルアップロード
+      $resume_path = Storage::disk('s3')->putFile('resume', $resume, 'public');
+      $CV_path = Storage::disk('s3')->putFile('CV', $CV, 'public');
+
+      //アップロードしたファイルのフルパスを取得
+      $resume_upload_path = Storage::disk('s3')->url($resume_path);
+      $CV_upload_path = Storage::disk('s3')->url($CV_path);
+
       $jinfo = JobInfo::find($id);
       $jinfo->uploads()->create([
           'name' => $request->name,
           'email' => $request->email,
           'tel' => $request->tel,
-          'resume' => $resume,
-          'CV' => $CV,
-
+          'resume' => $resume_upload_path,
+          'CV' => $CV_upload_path,
       ]);
-
-      $request->file('resume')->storeAs('public/resume',$resume);
-      $request->file('CV')->storeAs('public/CV',$CV);
 
       return view('upload.completion');
     }
